@@ -1,13 +1,15 @@
+import { useState } from 'react';
 import './App.css'
+import Main from './components/main'
 import Sidebar from './components/Sidebar'
 
 function App() {
- 
+  const [theme, setTheme] = useState("luxury");
   return (
     <>
-        <div className="flex h-screen ">
-            <Sidebar/>
-            <div className="bg-[#181c25] w-3/4 md:w-4/5 lg:w-5/6 h-screen">Main</div>
+        <div data-theme={theme} className="flex h-screen ">
+          <Sidebar/>
+          <Main setTheme={setTheme}/>
         </div>
     </>
   )

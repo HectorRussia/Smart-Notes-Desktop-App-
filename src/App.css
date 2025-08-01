@@ -1,6 +1,7 @@
 @import "tailwindcss";
-@plugin "daisyui";
-
+ @plugin "daisyui" {
+    themes: cupcake --default, dark --prefersdark, luxury;
+ }
 
 /* @plugin "daisyui" {
   include: toggle;
