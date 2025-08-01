@@ -1,6 +1,7 @@
 import { Eye, Pencil } from "lucide-react"
 import { useState } from "react";
 import type { ThemeProps } from "../Theme";
+import WriteNote from "./WriteNote";
 
 export const WriteWatch = ({currentTheme }: ThemeProps) => {
 
@@ -26,6 +27,9 @@ export const WriteWatch = ({currentTheme }: ThemeProps) => {
                 </div>
             </div>
             <div className="border-t border-gray-500 mt-5"></div>
+        </div>
+        <div className="flex h-[80vh] mt-2 p-2">
+            <WriteNote/>
         </div>
     </>
   )
