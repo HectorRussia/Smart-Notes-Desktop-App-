@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css'
-import Main from './components/main'
-import Sidebar from './components/Sidebar'
+import Main from './components/Layouts/Main'
+import Sidebar from './components/Layouts/Sidebar'
 
 function App() {
   const [theme, setTheme] = useState("luxury");
