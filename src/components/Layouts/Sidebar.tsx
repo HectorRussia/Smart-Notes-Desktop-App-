@@ -1,5 +1,5 @@
 import { FolderClosed, NotepadText,Plus, Search } from 'lucide-react';
-import Notes from '../Notes';
+import Notes from '../Notes/Notes';
 const Sidebar = () => {
   
     const Topics = [
