@@ -1,7 +1,7 @@
-import { Eye, Pencil } from "lucide-react"
 import Theme, { type ThemeProps } from "../Theme"
+import { WriteWatch } from "../WriteWatch/WriteWatch"
 
-const Main = ({setTheme} : ThemeProps) => {
+const Main = ({setTheme,currentTheme} : ThemeProps) => {
   return (
     <>
         <div className="w-3/4 md:w-4/5 lg:w-5/6 h-screen">
@@ -16,19 +16,7 @@ const Main = ({setTheme} : ThemeProps) => {
                     <div>tage2</div>
                 </div>
             </div>
-            <div className="flex flex-col w-full">
-                <div className="flex justify-evenly items-center gap-x-5 h-10 w-[200px] ml-10 bg-gray-800 mt-4 px-2 rounded-md">
-                    <div className="flex  gap-2 cursor-pointer">
-                        <div><Pencil /></div>
-                        <div>แก้ไข</div>
-                    </div>
-                    <div className="flex  gap-2 cursor-pointer">
-                        <div><Eye /></div>
-                        <div>ดูตัวอย่าง</div>
-                    </div>
-                </div>
-                <div className="border-t border-gray-500 mt-5"></div>
-            </div>
+           <WriteWatch setTheme={setTheme} currentTheme={currentTheme}/>
         </div>
     </>
   )

@@ -9,7 +9,7 @@ function App() {
     <>
         <div data-theme={theme} className="flex h-screen ">
           <Sidebar/>
-          <Main setTheme={setTheme}/>
+          <Main setTheme={setTheme} currentTheme={theme}/>
         </div>
     </>
   )
