@@ -1,6 +1,13 @@
 import { FolderClosed, NotepadText,Plus, Search } from 'lucide-react';
-import Notes from '../Notes/Notes';
-const Sidebar = () => {
+import Notes, { type NoteItem }  from '../Notes/Notes';
+
+interface SidebarProps {
+  onCreateNote: () => void;
+  onDeleteNote: (id: number) => void; // เพิ่มบรรทัดนี้
+  notes: NoteItem[]; // เปลี่ยนจาก NotesProps เป็น NoteItem[]
+}
+
+const Sidebar = ({onCreateNote,notes,onDeleteNote}:SidebarProps) => {
   
     const Topics = [
         { id: 1, name: 'All Notes' ,color: 'bg-pink-500'},
@@ -10,6 +17,7 @@ const Sidebar = () => {
         { id: 5, name: 'Work' ,color: 'bg-red-500'},
     ];
 
+ 
   return (
     <>
         <div className="flex flex-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/5 h-screen">
@@ -22,7 +30,7 @@ const Sidebar = () => {
 
                     <div className="font-bold cursor-pointer">
                         <div className="flex items-center justify-center w-10 h-10 rounded-md bg-[#ebcc05] hover:bg-yellow-200 transition-transform duration-100 active:scale-90"
-                        >
+                        onClick={onCreateNote}>
                             <Plus color='black'/>
                         </div>
                     </div>
@@ -52,12 +60,12 @@ const Sidebar = () => {
                         className="flex items-center mb-2 px-2 py-1 rounded-lg cursor-pointer font-bold transition-all duration-150 hover:text-black hover:bg-yellow-100 hover:shadow hover:scale-[1.03]"
                     >
                         <span className={`w-3 h-3 rounded-full mr-2 ${topic.color}`}></span>
-                        <span>{topic.name} (จำนวน)</span>
+                        <span>{topic.name} ({notes.length})</span>
                     </div>
                     ))}
                 </div>
             </div>
-            <Notes/>
+            <Notes notes={notes} onDeleteNote={onDeleteNote} />
         </div>
     </>
   )

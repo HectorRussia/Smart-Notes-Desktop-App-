@@ -1,9 +1,13 @@
 import { Eye, Pencil } from "lucide-react"
 import { useState } from "react";
 import type { ThemeProps } from "../Theme";
-import WriteNote from "./WriteNote";
+import WriteNote, { type noteProps } from "./WriteNote";
 
-export const WriteWatch = ({currentTheme }: ThemeProps) => {
+interface WriteWatchProps extends ThemeProps {
+  notes: noteProps[]
+}
+
+export const WriteWatch = ({currentTheme}: WriteWatchProps) => {
 
   const [selcted, setSelected] = useState<boolean>(false);
   const CustomText = currentTheme === "cupcake" ? "text-white" : "text-gray-400";
@@ -29,7 +33,7 @@ export const WriteWatch = ({currentTheme }: ThemeProps) => {
             <div className="border-t border-gray-500 mt-5"></div>
         </div>
         <div className="flex h-[80vh] mt-2 p-2">
-            <WriteNote/>
+            <WriteNote id={0} title={""} content={""} tags={[]} date={""} />
         </div>
     </>
   )

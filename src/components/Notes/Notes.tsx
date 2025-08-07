@@ -1,52 +1,64 @@
-const notes = [{
-    id: 1,
-    title: "ยินดีต้อนรับสู่ Smart Notes",
-    content: "ยินดีต้อนรับสู่ Smart Notes! 🎉 เริ่มต้นใช้งาน Smart Notes เป็นแอปจดโน้ตที่รองรับ",
-    tags: ["tag1", "tag2"],
-    date: "15 มค 07:00 น",
-},
-{
-    id: 2,
-    title: "การใช้งาน Markdown",
-    content: "Smart Notes รองรับ Markdown เต็มรูปแบบ ทำให้คุณสามารถเขียน",
-    tags: ["markdown", "writing"],
-    date: "16 มค 08:30 น",
-},
-{
-    id: 3,
-    title: "การจัดระเบียบโน้ต",
-    content: "คุณสามารถจัดระเบียบโน้ตด้วย Folder และ Tag เพื่อให้การค้นหาโน้ตได้อย่างรวดเร็ว",
-    tags: ["organization", "folders"],    
-    date: "17 มค 09:15 น",
-},
-{
-    id: 4,
-    title: "การค้นหาโน้ต",
-    content: "Smart Notes มีระบบค้นหาโน้ตที่รวดเร็วและแม่นยำ ทำให้คุณสามารถค้นหาโน้ตที่ต้องการได้อย่างง่ายดาย",
-    tags: ["search", "notes"],
-    date: "18 มค 10:00 น",
-},
-{
-    id: 5,
-    title: "การบันทึกอัตโนมัติ",
-    content: "Smart Notes มีระบบ Auto-save อัตโนมัติ ทำให้คุณไม่ต้องกังวลเรื่องการสูญหายของข้อมูล",
-    tags: ["autosave", "data"],
-    date: "19 มค 11:45 น",
-}
-    
-]
+import { MoreHorizontal, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
-const Notes = () => {
+export interface NoteItem {
+    id: number;
+    title: string;
+    content: string;
+    tags: string[];
+    date: string;
+}
+
+export interface NotesProps {
+    notes: NoteItem[];
+    onDeleteNote: (id: number) => void;
+}
+
+const Notes = ({notes, onDeleteNote}: NotesProps) => {
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const [deleteModal, setDeleteModal] = useState<number | null>(null);
+
+  const handleDelete = (noteId: number) => {
+    onDeleteNote(noteId);
+    setDeleteModal(null);
+    setOpenDropdown(null);
+  };
 
   return (
     <>
         <div className="flex flex-col h-screen mt-2 overflow-y-auto">
             {notes.map((note) => (
-            <div key={note.id} className="group bg-gray-600 p-5 mt-2 mx-2 cursor-pointer rounded-lg transition-colors duration-200 hover:bg-[#746f5a] hover:text-black">
+            <div key={note.id} className={`group relative p-5 mt-2 mx-2 cursor-pointer rounded-lg transition-colors duration-200 ${
+              note.title === "โน้ตใหม่" 
+                ? "bg-gray-500 hover:bg-gray-400"
+                : "bg-gray-600 hover:bg-[#746f5a] hover:text-black"
+            }`}>
                 <div className="flex items-center justify-between">
+
                     <div>{note.title}</div>
-                    {/* จะแสดงเมื่อ hover กล่องใหญ่ */}
-                    <div className="hidden group-hover:block text-white text-md rounded">...</div>
+
+                    {/* Dropdown Menu - เปลี่ยนเป็น hover */}
+                    <div className="relative group/dropdown ">
+                        <button
+                            className="opacity-0 group-hover:opacity-100 text-white hover:text-yellow-400 p-2 rounded-full hover:bg-gray-700 transition-all duration-200 " 
+                        >
+                            <MoreHorizontal size={18} className='cursor-pointer'/>
+                        </button>
+
+                        {/* Dropdown Content - แสดงเมื่อ hover */}
+                        <div className="absolute right-0 mt-1 w-32 bg-gray-800 rounded-md shadow-lg z-50 border border-gray-600 opacity-0 group-hover/dropdown:opacity-100 invisible group-hover/dropdown:visible transition-all duration-200">
+                            <button
+                                className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-700 hover:text-red-300 rounded-md transition-colors"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDeleteModal(note.id);
+                                }}
+                            >
+                                <Trash2 size={16} />
+                                <span>ลบ</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div className="text-sm text-gray-300">{note.content}</div>
                 <div className="flex items-center gap-2 mt-2">
@@ -57,22 +69,45 @@ const Notes = () => {
                 <div className="mt-2">{note.date}</div>
             </div>
             ))}
-          {/*  <div className="group bg-gray-600 p-5 mx-2 cursor-pointer rounded-lg transition-colors duration-200 hover:bg-[#746f5a] hover:text-black">
-            <div className="flex items-center justify-between">
-                <div>ยินดีต้อนรับสู่ Smart Notes</div>
-                จะแสดงเมื่อ hover กล่องใหญ่
-                <div className="hidden group-hover:block text-white text-md rounded">...</div>
-            </div>
-            <div className="text-sm text-gray-300">
-                ยินดีต้อนรับสู่ Smart Notes! 🎉 เริ่มต้นใช้งาน Smart Notes เป็นแอปจดโน้ตที่รองรับ
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-                <div>tag1</div>
-                <div>tag2</div>
-            </div>
-            <div className="mt-2">15 มค 07:00 น</div>
-            </div> */}
         </div>
+
+
+        {/* Delete Confirmation Modal */}
+        {deleteModal && (
+            <dialog id={`delete_modal_${deleteModal}`} className="modal modal-open">
+                <div className="modal-box">
+                    <h3 className="text-lg font-bold">ยืนยันการลบ</h3>
+                    <p className="py-4">คุณแน่ใจหรือไม่ว่าต้องการลบโน้ตนี้? การกระทำนี้ไม่สามารถยกเลิกได้</p>
+                    <div className="modal-action">
+                        <button 
+                            className="btn btn-error"
+                            onClick={() => handleDelete(deleteModal)}
+                        >
+                            ลบ
+                        </button>
+                        <button 
+                            className="btn btn-ghost"
+                            onClick={() => setDeleteModal(null)}
+                        >
+                            ยกเลิก
+                        </button>
+                    </div>
+                </div>
+                {/* Click outside to close */}
+                <div 
+                    className="modal-backdrop" 
+                    onClick={() => setDeleteModal(null)}
+                ></div>
+            </dialog>
+        )}
+
+        {/* Click outside dropdown to close */}
+        {openDropdown && (
+            <div 
+                className="fixed inset-0 z-0" 
+                onClick={() => setOpenDropdown(null)}
+            />
+        )}
     </>
   )
 }
